@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-df = pd.read_csv("digital_diet_mental_health.csv")
+df = pd.read_csv("steam_top_games_2026.csv")
 
 # checking the data content and structure
 
