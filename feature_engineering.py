@@ -63,5 +63,75 @@ sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap='coolwarm', cbar=True)
 plt.title("Correlation Heatmap")
 plt.show()
 
+# --- Preprocessing & Feature Engineering ---
 
+def preprocess_data(data):
+    """Basic data cleaning and preprocessing."""
+    # Drop duplicate rows
+    data = data.drop_duplicates()
+    
+    # Fill missing values for numerical columns
+    if 'metacritic_score' in data.columns:
+        data['metacritic_score'] = data['metacritic_score'].fillna(data['metacritic_score'].median())
+    if 'recommendations' in data.columns:
+        data['recommendations'] = data['recommendations'].fillna(0)
+        
+    # Convert release_date to datetime format
+    if 'release_date' in data.columns:
+        data['release_date'] = pd.to_datetime(data['release_date'], errors='coerce')
+        
+    return data
+
+def create_new_features(data):
+    """Create new relevant features from existing ones."""
+    # 1. Total Reviews
+    if 'positive_reviews' in data.columns and 'negative_reviews' in data.columns:
+        data['total_reviews'] = data['positive_reviews'] + data['negative_reviews']
+        
+        # 2. Review Sentiment (Positive Review Ratio)
+        data['positive_review_ratio'] = np.where(data['total_reviews'] > 0, 
+                                               data['positive_reviews'] / data['total_reviews'], 
+                                               0)
+    
+    # 3. Release Year and Month
+    if 'release_date' in data.columns:
+        data['release_year'] = data['release_date'].dt.year
+        data['release_month'] = data['release_date'].dt.month
+        
+    # 4. Number of Platforms
+    platforms = ['platforms_win', 'platforms_mac', 'platforms_linux']
+    if all(col in data.columns for col in platforms):
+        data['num_platforms'] = data['platforms_win'].astype(int) + \
+                              data['platforms_mac'].astype(int) + \
+                              data['platforms_linux'].astype(int)
+                              
+    # 5. Average Estimated Owners (parsing the string range)
+    def parse_owners(owner_str):
+        if pd.isna(owner_str):
+            return 0
+        try:
+            parts = owner_str.replace(',', '').split(' .. ')
+            return (int(parts[0]) + int(parts[1])) / 2
+        except:
+            return 0
+            
+    if 'estimated_owners' in data.columns:
+        data['avg_estimated_owners'] = data['estimated_owners'].apply(parse_owners)
+        
+    return data
+
+# Apply preprocessing
+print("\n--- Applying Preprocessing ---")
+df = preprocess_data(df)
+print("Data shape after preprocessing:", df.shape)
+
+# Apply feature engineering
+print("\n--- Applying Feature Engineering ---")
+df = create_new_features(df)
+
+# Check the new features
+new_cols = ['total_reviews', 'positive_review_ratio', 'release_year', 'num_platforms', 'avg_estimated_owners']
+available_new_cols = [col for col in new_cols if col in df.columns]
+print(f"Created new features: {available_new_cols}")
+print(df[available_new_cols].head())
 
