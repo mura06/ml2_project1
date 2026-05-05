@@ -19,8 +19,22 @@ df_c = df.select_dtypes(include=['object'])
 print(df_c.head(), "\n")
 
 # Look for inconsistencies in the categorical variables
-for i in df_c.columns:
-    print(df_c[i].value_counts(), "\n")
+print("--- Categorical Variables Unique Counts ---")
+for col in df_c.columns:
+    unique_count = df_c[col].nunique()
+    print(f"{col}: {unique_count} unique values")
+    
+    # If the column has a manageable number of unique values (low cardinality), let's plot it
+    if unique_count < 20:
+        plt.figure(figsize=(10, 5))
+        sns.countplot(data=df, y=col, order=df[col].value_counts().index)
+        plt.title(f'Distribution of {col}')
+        plt.tight_layout()
+        plt.show()
+    else:
+        # For high cardinality columns (like 'name', 'developer'), just show the top 5 to check for formatting issues
+        print(f"Top 5 most frequent values in {col}:")
+        print(df_c[col].value_counts().head(5), "\n")
 
 
 # Numerical variables
@@ -70,9 +84,9 @@ def preprocess_data(data):
     # Drop duplicate rows
     data = data.drop_duplicates()
     
-    # Fill missing values for numerical columns
+    # metacritic_score has ~64% missing values, so it's better to drop it
     if 'metacritic_score' in data.columns:
-        data['metacritic_score'] = data['metacritic_score'].fillna(data['metacritic_score'].median())
+        data = data.drop(columns=['metacritic_score'])
     if 'recommendations' in data.columns:
         data['recommendations'] = data['recommendations'].fillna(0)
         
