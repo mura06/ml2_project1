@@ -70,9 +70,9 @@ def preprocess_data(data):
     # Drop duplicate rows
     data = data.drop_duplicates()
     
-    # Fill missing values for numerical columns
+    # metacritic_score has ~64% missing values, so it's better to drop it
     if 'metacritic_score' in data.columns:
-        data['metacritic_score'] = data['metacritic_score'].fillna(data['metacritic_score'].median())
+        data = data.drop(columns=['metacritic_score'])
     if 'recommendations' in data.columns:
         data['recommendations'] = data['recommendations'].fillna(0)
         
