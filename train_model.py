@@ -74,7 +74,7 @@ def plot_elbow_method(scaled_data, max_k=10):
     plt.ylabel('WCSS')
     plt.xticks(range(1, max_k + 1))
     plt.grid(True)
-    plt.show()
+    # plt.show()
 
 def plot_clusters_pca(scaled_data, cluster_labels, title='Clusters Visualized with PCA'):
     """
@@ -91,7 +91,7 @@ def plot_clusters_pca(scaled_data, cluster_labels, title='Clusters Visualized wi
     plt.title(title)
     plt.xlabel(f'First Principal Component ({pca.explained_variance_ratio_[0]:.2%} variance)')
     plt.ylabel(f'Second Principal Component ({pca.explained_variance_ratio_[1]:.2%} variance)')
-    plt.show()
+    # plt.show()
 
 def plot_clusters_tsne(scaled_data, cluster_labels, title='Clusters Visualized with t-SNE'):
     """
@@ -106,7 +106,7 @@ def plot_clusters_tsne(scaled_data, cluster_labels, title='Clusters Visualized w
     plt.figure(figsize=(10, 8))
     sns.scatterplot(x='t-SNE 1', y='t-SNE 2', hue='Cluster', palette='viridis', data=tsne_df, alpha=0.7)
     plt.title(title)
-    plt.show()
+    # plt.show()
 
 if __name__ == "__main__":
     # Load and preprocess data
@@ -205,3 +205,8 @@ if __name__ == "__main__":
         print(f"\nSOM Cluster {label}:")
         sample_games = df[df['SOM_Cluster'] == label]['name'].head(5).tolist()
         print(", ".join(str(name) for name in sample_games))
+
+    # Save the clustered dataframe for the Streamlit app
+    print("\nSaving clustered dataset to 'clustered_games.csv'...")
+    df.to_csv("clustered_games.csv", index=False)
+    print("Done!")

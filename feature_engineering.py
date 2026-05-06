@@ -19,7 +19,7 @@ def preprocess_data(data):
         
     # Convert release_date to datetime format
     if 'release_date' in data.columns:
-        data['release_date'] = pd.to_datetime(data['release_date'], errors='coerce')
+        data['release_date'] = pd.to_datetime(data['release_date'], format='mixed', errors='coerce')
         
     return data
 

@@ -1,0 +1,7 @@
+[theme]
+# Steam brand colors
+primaryColor = "#66c0f4"
+backgroundColor = "#1b2838"
+secondaryBackgroundColor = "#171a21"
+textColor = "#c7d5e0"
+font = "sans serif"
