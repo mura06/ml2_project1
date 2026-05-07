@@ -71,7 +71,14 @@ with col1:
     # A simple placeholder for a logo
     st.markdown("""
     <div style="background: linear-gradient(135deg, #171a21 0%, #1b2838 100%); border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border: 2px solid #66c0f4; margin-top: 10px;">
-        <span style="font-size: 40px;">🎮</span>
+        <svg viewBox="0 0 100 100" fill="#ffffff" width="45" height="45" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 28 25 Q 50 30 72 25 C 90 25 95 45 88 68 C 85 78 75 78 66 65 Q 50 50 34 65 C 25 78 15 78 12 68 C 5 45 10 25 28 25 Z" />
+            <g fill="#1b2838" stroke="#1b2838">
+                <path d="M 30 38 V 54 M 22 46 H 38" stroke-width="8" stroke-linecap="round" />
+                <circle cx="76" cy="36" r="5.5" stroke-width="0" />
+                <circle cx="60" cy="52" r="5.5" stroke-width="0" />
+            </g>
+        </svg>
     </div>
     """, unsafe_allow_html=True)
 with col2:
@@ -96,7 +103,7 @@ if df is None:
 
 # Sidebar for inputs
 with st.sidebar:
-    st.markdown("### ⚙️ Engine Settings")
+    st.markdown("### ENGINE SETTINGS")
     
     game_list = sorted(df['name'].dropna().unique().tolist())
     selected_game = st.selectbox("Select a base game:", game_list, index=None, placeholder="Search for a game...", help="We'll find games similar to this one.")
@@ -117,7 +124,7 @@ if not selected_game:
     st.markdown("""
     <div style="background-color: #171a21; padding: 30px; border-radius: 8px; text-align: center; border: 1px dashed #2a475e; margin-top: 20px;">
         <h3 style="color: #8f98a0; font-size: 24px;">Welcome to the Discovery Queue</h3>
-        <p style="color: #66c0f4; font-size: 16px;">👈 Select a base game from the sidebar to generate personalized recommendations.</p>
+        <p style="color: #66c0f4; font-size: 16px;">Select a base game from the sidebar to generate personalized recommendations.</p>
     </div>
     """, unsafe_allow_html=True)
     st.stop()
@@ -155,7 +162,7 @@ def get_genres(row):
     return ", ".join(genres)
 
 # Layout: Tabs
-tab1, tab2, tab3 = st.tabs(["🎯 Top Matches", "📋 Full Cluster Results", "🔗 Sequels & Franchise"])
+tab1, tab2, tab3 = st.tabs(["TOP MATCHES", "FULL CLUSTER RESULTS", "SEQUELS & FRANCHISE"])
 
 # --- TAB 1: Top Matches ---
 with tab1:
